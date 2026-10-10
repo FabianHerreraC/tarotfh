@@ -1,0 +1,244 @@
+[
+  {
+    "id": 0,
+    "numero": "0",
+    "nombre": "El Loco",
+    "imagen": "img/00-loco.jpg",
+    "frases": [
+      "La inocencia guarda toda la potencia.",
+      "Quien ignora el abismo puede dar el primer paso.",
+      "Saltar es el privilegio de no saber."
+    ]
+  },
+  {
+    "id": 1,
+    "numero": "I",
+    "nombre": "El Mago",
+    "imagen": "img/01-mago.jpg",
+    "frases": [
+      "Ama sus herramientas como un amante.",
+      "Su puente hacia el mundo es el hacer.",
+      "Necesita que lo miren hacer."
+    ]
+  },
+  {
+    "id": 2,
+    "numero": "II",
+    "nombre": "La Papisa",
+    "imagen": "img/02-papisa.jpg",
+    "frases": [
+      "Quien guarda la puerta guarda la palabra.",
+      "La palabra justa, dicha a tiempo, da fruto.",
+      "Así se abre el templo."
+    ]
+  },
+  {
+    "id": 3,
+    "numero": "III",
+    "nombre": "La Emperatriz",
+    "imagen": "img/03-emperatriz.jpg",
+    "frases": [
+      "Hacer crecer es su forma de mandar.",
+      "Su autoridad convierte la potencia en realidad.",
+      "Gobierna fertilizando."
+    ]
+  },
+  {
+    "id": 4,
+    "numero": "IV",
+    "nombre": "El Emperador",
+    "imagen": "img/04-emperador.jpg",
+    "frases": [
+      "El carnero de piedra planta firmes las patas.",
+      "Empuja con la vara y sostiene con la esfera.",
+      "Su fuerza es perseverar."
+    ]
+  },
+  {
+    "id": 5,
+    "numero": "V",
+    "nombre": "El Papa",
+    "imagen": "img/05-papa.jpg",
+    "frases": [
+      "Habla, y en su palabra van las llaves.",
+      "Su poder vive en los oídos ajenos.",
+      "Reina quien escucha."
+    ]
+  },
+  {
+    "id": 6,
+    "numero": "VI",
+    "nombre": "Los Enamorados",
+    "imagen": "img/06-enamorados.jpg",
+    "frases": [
+      "Una montaña separa a los amantes.",
+      "Esa distancia enciende el deseo.",
+      "El amor arde como la zarza, sin consumirse."
+    ]
+  },
+  {
+    "id": 7,
+    "numero": "VII",
+    "nombre": "El Carro",
+    "imagen": "img/07-carro.jpg",
+    "frases": [
+      "Avanza sin riendas, con caballos que tiran hacia lados distintos.",
+      "El alma recuerda por el polvo del camino.",
+      "La meta aparece al llegar."
+    ]
+  },
+  {
+    "id": 8,
+    "numero": "VIII",
+    "nombre": "La Fuerza",
+    "imagen": "img/08-fuerza.jpg",
+    "frases": [
+      "Abre la boca del león con las manos desnudas.",
+      "Su fuerza es conversar con la bestia.",
+      "Acompaña y es acompañada."
+    ]
+  },
+  {
+    "id": 9,
+    "numero": "IX",
+    "nombre": "El Ermitaño",
+    "imagen": "img/09-ermitano.jpg",
+    "frases": [
+      "La lámpara ilumina solo el paso siguiente.",
+      "Lee el camino que se le muestra.",
+      "Camina en silencio junto a la serpiente."
+    ]
+  },
+  {
+    "id": 10,
+    "numero": "X",
+    "nombre": "La Rueda de la Fortuna",
+    "imagen": "img/10-rueda-de-la-fortuna.jpg",
+    "frases": [
+      "Todo sube y baja en el mismo giro.",
+      "La espada corta el instante justo.",
+      "El azar es un orden aún sin leer."
+    ]
+  },
+  {
+    "id": 11,
+    "numero": "XI",
+    "nombre": "La Justicia",
+    "imagen": "img/11-justicia.jpg",
+    "frases": [
+      "La balanza pesa y la espada separa.",
+      "Antes del juicio está la pregunta por el origen.",
+      "Toda medida fue fijada por alguien."
+    ]
+  },
+  {
+    "id": 12,
+    "numero": "XII",
+    "nombre": "El Colgado",
+    "imagen": "img/12-colgado.jpg",
+    "frases": [
+      "Él mismo anudó la cuerda.",
+      "Cabeza abajo, el mundo se deja ver.",
+      "Perderse es la primera condición del camino."
+    ]
+  },
+  {
+    "id": 13,
+    "numero": "XIII",
+    "nombre": "La Muerte",
+    "imagen": "img/13-muerte.jpg",
+    "frases": [
+      "La guadaña siega todo a la misma altura.",
+      "La corona cae a la tierra.",
+      "El papel vuelve al mazo y quedan las obras."
+    ]
+  },
+  {
+    "id": 14,
+    "numero": "XIV",
+    "nombre": "La Templanza",
+    "imagen": "img/14-templanza.jpg",
+    "frases": [
+      "El mismo líquido pasa de una copa a otra.",
+      "Remedio y veneno dependen de la medida.",
+      "El tiempo transmuta sin romper."
+    ]
+  },
+  {
+    "id": 15,
+    "numero": "XV",
+    "nombre": "El Diablo",
+    "imagen": "img/15-diablo.jpg",
+    "frases": [
+      "Las cadenas cuelgan flojas y nadie se las quita.",
+      "El engaño más eficaz es bello.",
+      "Lo que seduce revela la sombra."
+    ]
+  },
+  {
+    "id": 16,
+    "numero": "XVI",
+    "nombre": "La Torre",
+    "imagen": "img/16-torre.jpg",
+    "frases": [
+      "El rayo quiebra el castillo que se miraba a sí mismo.",
+      "Toda caída abre un lugar.",
+      "Sin muros, algo nuevo puede llegar."
+    ]
+  },
+  {
+    "id": 17,
+    "numero": "XVII",
+    "nombre": "La Estrella",
+    "imagen": "img/17-estrella.jpg",
+    "frases": [
+      "El agua en movimiento impide el espejo.",
+      "Una jarra alimenta lo que fluye y la otra riega lo que falta.",
+      "La estrella señala y se retira."
+    ]
+  },
+  {
+    "id": 18,
+    "numero": "XVIII",
+    "nombre": "La Luna",
+    "imagen": "img/18-luna.jpg",
+    "frases": [
+      "Su luz es prestada.",
+      "Lo que se ve de noche cambia de forma.",
+      "Amar es aceptar al otro por fases."
+    ]
+  },
+  {
+    "id": 19,
+    "numero": "XIX",
+    "nombre": "El Sol",
+    "imagen": "img/19-sol.jpg",
+    "frases": [
+      "Dos niños juegan bajo una luz sin sombra.",
+      "Todo se vuelve visible.",
+      "El misterio aprende a vivir a pleno día."
+    ]
+  },
+  {
+    "id": 20,
+    "numero": "XX",
+    "nombre": "El Juicio",
+    "imagen": "img/20-juicio.jpg",
+    "frases": [
+      "Una trompeta llama y todos se alzan con el mismo gesto.",
+      "Juzgar es separarse de la tumba.",
+      "Nadie trae balanza."
+    ]
+  },
+  {
+    "id": 21,
+    "numero": "XXI",
+    "nombre": "El Mundo",
+    "imagen": "img/21-mundo.jpg",
+    "frases": [
+      "Una figura danza en el centro de la guirnalda.",
+      "Su paso repite el del Loco.",
+      "El recorrido nunca fue una línea."
+    ]
+  }
+]
