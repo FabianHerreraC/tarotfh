@@ -773,6 +773,47 @@
   lupa.addEventListener('click', cerrarLupa);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarLupa(); });
 
+  // ——— Ficha: la explicación amplia de cada carta ———
+
+  const ficha = $('#ficha');
+  let fichaVolver = null;
+
+  function abrirFicha(c) {
+    const a = arcanos[c.carta];
+    if (!a.explicacion || !ficha.hidden) return;
+    fichaVolver = document.activeElement;
+    clearTimeout(relojHaiku);   // la frase no se apaga mientras se lee
+    $('#ficha-indice').textContent = `[${a.numero}]${c.invertida ? ' · INVERTIDA' : ''}`;
+    $('#ficha-titulo').textContent = a.nombre;
+    $('#ficha-frase').textContent = a.frases.join(' ');
+    // Párrafos propios de arcanos.json; solo traen <i> para las cursivas
+    $('#ficha-cuerpo').innerHTML = a.explicacion
+      .map((p, i) => `<p><span class="ficha-num">[0${i + 1}]</span> ${p}</p>`).join('');
+    const img = $('#ficha-img');
+    img.src = a.imagen;
+    img.alt = `${a.nombre}, ilustración Rider-Waite-Smith`;
+    img.classList.toggle('invertida', c.invertida);
+    ficha.hidden = false;
+    ficha.querySelector('.ficha-panel').scrollTop = 0;
+    $('#ficha-cerrar').focus();
+    if (!mqQuieto.matches) {
+      ficha.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'ease' });
+      ficha.querySelector('.ficha-panel').animate(
+        [{ transform: 'translateY(10px)' }, { transform: 'none' }], { duration: 360, easing: SUAVE });
+    }
+  }
+
+  function cerrarFicha() {
+    if (ficha.hidden) return;
+    ficha.hidden = true;
+    relojHaiku = setTimeout(ocultarHaiku, 6000);
+    if (fichaVolver && fichaVolver.isConnected) fichaVolver.focus({ preventScroll: true });
+  }
+
+  $('#ficha-cerrar').addEventListener('click', cerrarFicha);
+  ficha.addEventListener('click', (e) => { if (e.target === ficha) cerrarFicha(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarFicha(); });
+
   // ——— Haiku ———
 
   let capaActiva = 0;
@@ -783,7 +824,9 @@
     const a = arcanos[c.carta];
     const nueva = capas[1 - capaActiva];
     const vieja = capas[capaActiva];
-    nueva.innerHTML = `<p class="frase"><span class="frase-titulo"><span class="num">[${a.numero}]</span> <span class="nombre">${a.nombre}</span>${c.invertida ? ' <span class="marca-inv">INVERTIDA</span>' : ''}</span> <span class="frase-texto">${a.frases.join(' ')}</span></p>`;
+    nueva.innerHTML = `<div class="frase-fila"><p class="frase"><span class="frase-titulo"><span class="num">[${a.numero}]</span> <span class="nombre">${a.nombre}</span>${c.invertida ? ' <span class="marca-inv">INVERTIDA</span>' : ''}</span> <span class="frase-texto">${a.frases.join(' ')}</span></p>${a.explicacion ? `<button type="button" class="mas" aria-label="Leer más sobre ${a.nombre}" title="Leer más">+</button>` : ''}</div>`;
+    const mas = nueva.querySelector('.mas');
+    if (mas) mas.addEventListener('click', () => abrirFicha(c));
     vieja.classList.remove('visible');
     nueva.classList.add('visible');
     capaActiva = 1 - capaActiva;
@@ -1296,7 +1339,7 @@
     aplicarVista(suave);
   }
 
-  const capaAbierta = () => !rueda.hidden || !lupa.hidden;
+  const capaAbierta = () => !rueda.hidden || !lupa.hidden || !ficha.hidden;
   const zoomPosible = () => modo === 'mesa' && !capaAbierta();
   const alCentro = (factor) => zoomEn(vista.z * factor, geo.W / 2, geo.H / 2, true);
 

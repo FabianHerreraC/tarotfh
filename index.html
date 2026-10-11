@@ -116,6 +116,21 @@
     <p class="rueda-pie">GIRAR · ← → · ENTER TRAE · ESC CIERRA</p>
   </div>
 
+  <div class="ficha" id="ficha" role="dialog" aria-modal="true" aria-labelledby="ficha-titulo" hidden>
+    <article class="ficha-panel">
+      <button type="button" class="ficha-cerrar" id="ficha-cerrar" aria-label="Cerrar" title="Cerrar (Esc)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <img class="ficha-img" id="ficha-img" alt="" draggable="false">
+      <div class="ficha-texto">
+        <p class="ficha-indice" id="ficha-indice"></p>
+        <h2 class="ficha-titulo" id="ficha-titulo"></h2>
+        <p class="ficha-frase" id="ficha-frase"></p>
+        <div class="ficha-cuerpo" id="ficha-cuerpo"></div>
+      </div>
+    </article>
+  </div>
+
   <div class="lupa" id="lupa" role="dialog" aria-modal="true" aria-labelledby="lupa-titulo" hidden>
     <figure class="lupa-figura">
       <img class="lupa-img" id="lupa-img" alt="" draggable="false">

@@ -10,7 +10,7 @@ Spec: «Spec: web app de tiradas de tarot» (Claude Docs). Página estática, si
 | `app.js` | Barajador, arrastre, volteo, frase, versión móvil, reinicio |
 | `azar.js` | La ecuación de π: `k = (t + 314g + 1592m) mod (L − 7)`, `i = ⌊u·n⌋` |
 | `pi.js` | 100.000 decimales de π (fórmula de Machin) |
-| `arcanos.json` | Las 22 cartas con sus frases (tres oraciones cada una) |
+| `arcanos.json` | Las 22 cartas: frase de tres oraciones y `explicacion`, tres párrafos que despliegan cada oración (del doc «Los 22 arcanos en tres párrafos») |
 | `img/` | Las 22 ilustraciones Rider-Waite-Smith (1909) |
 | `fuentes/` | IBM Plex Mono 400 (latín y latín extendido) y su licencia OFL |
 | `tema.js` | Aplica el tema guardado antes de pintar |
@@ -63,6 +63,7 @@ Límites del servicio: 30 peticiones cada 10 s por IP, y el contador caduca tras
 - Rueda (botón de la mira, arriba a la derecha): gira con arrastre, rueda del mouse o flechas; el número que queda bajo la marca se trae con el centro o Enter. Llega boca arriba y en el rastro figura como RUEDA. Los números que ya salieron se ven apagados.
 - Foto (botón de la cámara, arriba a la derecha): dibuja la mesa en un PNG al doble de resolución, con cotas, mazo, cartas, rastro π, frase visible y fecha. En escritorio lo descarga; en el teléfono abre el menú de compartir.
 - Zoom de la mesa (escritorio, hasta 300 %): lupas a la derecha de la mesa, pellizco del trackpad (hacia donde apunta el cursor) o teclas + y −; 0 o un clic en el porcentaje vuelve al 100 %. Ampliada, la mesa se desplaza con dos dedos o arrastrando el fondo. La foto siempre sale sin zoom.
+- Leer más: junto a la frase de cada carta hay un botón «+» que abre su explicación amplia (ilustración, frase y tres párrafos). Se cierra con Esc, la ✕ o un clic fuera.
 
 ## Seguridad y privacidad
 
