@@ -217,6 +217,7 @@ a.marca-nombre:hover, a.marca-nombre:focus-visible { text-decoration: underline;
   left: 0; right: 0; bottom: 0;
   touch-action: none;
   z-index: 1;
+  overflow: hidden;   /* al ampliar, la mesa no invade la cabecera */
 }
 
 .cotas {
@@ -261,7 +262,6 @@ a.marca-nombre:hover, a.marca-nombre:focus-visible { text-decoration: underline;
   border-radius: 8px;
   background: var(--carta);
   border: 1px solid var(--tinta-fina);
-  will-change: transform;
 }
 
 .lamina svg, .cara svg { display: block; width: 100%; height: 100%; }
@@ -288,6 +288,62 @@ a.marca-nombre:hover, a.marca-nombre:focus-visible { text-decoration: underline;
   transition: transform 0.6s var(--facil);
 }
 
+/* Plano ampliable */
+
+.plano {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+}
+
+.plano.suave { transition: transform 0.28s var(--facil); }
+.mesa.ampliada { cursor: grab; }
+.mesa.paneando { cursor: grabbing; }
+
+.zoom {
+  /* arriba a la derecha, en el margen exterior a la cota vertical [03] */
+  position: absolute;
+  right: 4px;
+  top: 44px;
+  width: 26px;
+  z-index: 3500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.zoom-boton {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--tinta-fina);
+  border-radius: 50%;
+  background: var(--fondo);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: border-color 0.2s;
+}
+
+.zoom-boton svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; }
+.zoom-boton:hover:not(:disabled) { border-color: var(--tinta); }
+.zoom-boton:disabled { opacity: 0.3; cursor: default; }
+
+.zoom-nivel {
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--tinta-media);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.zoom-nivel:hover { color: var(--tinta); }
+
+body.movil .zoom { display: none; }
+
 /* Cartas */
 
 .carta {
@@ -298,10 +354,10 @@ a.marca-nombre:hover, a.marca-nombre:focus-visible { text-decoration: underline;
   perspective: 900px;
   cursor: grab;
   touch-action: none;
-  will-change: transform;
 }
 
-.carta.arrastrando { cursor: grabbing; }
+/* Solo la carta en mano va en su propia capa: así, al ampliar la mesa, las demás se redibujan nítidas */
+.carta.arrastrando { cursor: grabbing; will-change: transform; }
 
 .carta-cuerpo {
   position: absolute;
@@ -657,8 +713,17 @@ body.movil .mazo-cuenta { text-align: center; }
 @media (min-width: 768px) and (max-width: 1080px) {
   :root { --ancho-frase: calc(100vw - 64px); }
   .rastro { right: var(--margen); bottom: 84px; }
-  .opciones { gap: 14px; }
-  .cabecera { gap: 18px; }
+  .opciones { gap: 10px; }
+  .cabecera { gap: 12px; padding-left: 32px; padding-right: 32px; }
+  .cabecera::after { left: 32px; right: 32px; }
+  .marca .caja-corte { display: none; }
+  .idx { font-size: 13px; }
+  .opcion { column-gap: 6px; }
+}
+
+@media (min-width: 768px) and (max-width: 860px) {
+  .cabecera { padding-left: 20px; padding-right: 20px; }
+  .cabecera::after { left: 20px; right: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

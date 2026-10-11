@@ -72,14 +72,27 @@
   </header>
 
   <main class="mesa" id="mesa" aria-label="Mesa de tirada">
-    <!-- Cotas del mazo y de la casilla de entrega (solo escritorio) -->
-    <svg class="cotas" id="cotas" aria-hidden="true"></svg>
+    <!-- El plano es lo que se amplía: cotas, mazo y cartas -->
+    <div class="plano" id="plano">
+      <!-- Cotas del mazo y de la casilla de entrega (solo escritorio) -->
+      <svg class="cotas" id="cotas" aria-hidden="true"></svg>
 
-    <div class="mazo" id="mazo" role="button" tabindex="0" aria-label="Mazo: tocar para barajar y sacar una carta">
-      <div class="mazo-pila" id="mazo-pila"></div>
+      <div class="mazo" id="mazo" role="button" tabindex="0" aria-label="Mazo: tocar para barajar y sacar una carta">
+        <div class="mazo-pila" id="mazo-pila"></div>
+      </div>
+      <div class="mazo-cuenta" id="mazo-cuenta" aria-live="polite">XXII</div>
+      <div class="descarte" id="descarte" aria-hidden="true"></div>
     </div>
-    <div class="mazo-cuenta" id="mazo-cuenta" aria-live="polite">XXII</div>
-    <div class="descarte" id="descarte" aria-hidden="true"></div>
+
+    <div class="zoom" role="group" aria-label="Zoom de la mesa">
+      <button type="button" class="zoom-boton" id="zoom-mas" aria-label="Acercar la mesa" title="Acercar (+)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5M8 10.5h5M10.5 8v5"/></svg>
+      </button>
+      <button type="button" class="zoom-nivel" id="zoom-nivel" aria-label="Volver al tamaño original" title="Tamaño original (0)">100%</button>
+      <button type="button" class="zoom-boton" id="zoom-menos" aria-label="Alejar la mesa" title="Alejar (−)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5M8 10.5h5"/></svg>
+      </button>
+    </div>
 
     <ol class="rastro" id="rastro" aria-label="Rastro de π"></ol>
   </main>

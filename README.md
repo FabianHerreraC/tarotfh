@@ -62,6 +62,7 @@ Límites del servicio: 30 peticiones cada 10 s por IP, y el contador caduca tras
 - Doble clic (o doble toque) en una carta: la amplía a su resolución nativa, sin pasar de 1 px de imagen por px de pantalla. Clic o Esc la cierra. Con teclado: Shift+Enter.
 - Rueda (botón de la mira, arriba a la derecha): gira con arrastre, rueda del mouse o flechas; el número que queda bajo la marca se trae con el centro o Enter. Llega boca arriba y en el rastro figura como RUEDA. Los números que ya salieron se ven apagados.
 - Foto (botón de la cámara, arriba a la derecha): dibuja la mesa en un PNG al doble de resolución, con cotas, mazo, cartas, rastro π, frase visible y fecha. En escritorio lo descarga; en el teléfono abre el menú de compartir.
+- Zoom de la mesa (escritorio, hasta 300 %): lupas a la derecha de la mesa, pellizco del trackpad (hacia donde apunta el cursor) o teclas + y −; 0 o un clic en el porcentaje vuelve al 100 %. Ampliada, la mesa se desplaza con dos dedos o arrastrando el fondo. La foto siempre sale sin zoom.
 
 ## Seguridad y privacidad
 

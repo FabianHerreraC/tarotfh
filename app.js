@@ -10,6 +10,7 @@
 
   const $ = (s) => document.querySelector(s);
   const mesa = $('#mesa');
+  const plano = $('#plano');
   const mazo = $('#mazo');
   const pila = $('#mazo-pila');
   const cuenta = $('#mazo-cuenta');
@@ -274,7 +275,8 @@
     alFrente(c);
 
     const p0 = { x: e.clientX, y: e.clientY };
-    let agarre = { dx: e.clientX - c.x * geo.W, dy: e.clientY - c.y * geo.H };
+    const p0m = aMesa(e.clientX, e.clientY);
+    let agarre = { dx: p0m.x - c.x * geo.W, dy: p0m.y - c.y * geo.H };
     let arrastre = false;
     let ancla = null;
 
@@ -291,10 +293,12 @@
       } else {
         if (ancla) {
           ancla = null;
-          agarre = { dx: ev.clientX - c.x * geo.W, dy: ev.clientY - c.y * geo.H };
+          const pa = aMesa(ev.clientX, ev.clientY);
+          agarre = { dx: pa.x - c.x * geo.W, dy: pa.y - c.y * geo.H };
         }
-        c.x = clamp(ev.clientX - agarre.dx, 0, geo.W - geo.cw) / geo.W;
-        c.y = clamp(ev.clientY - agarre.dy, 0, geo.H - geo.ch) / geo.H;
+        const p = aMesa(ev.clientX, ev.clientY);
+        c.x = clamp(p.x - agarre.dx, 0, geo.W - geo.cw) / geo.W;
+        c.y = clamp(p.y - agarre.dy, 0, geo.H - geo.ch) / geo.H;
       }
       aplicar(c);
     };
@@ -476,7 +480,7 @@
       z: ++zTope,
       pi: op.pi,
     };
-    mesa.appendChild(crearCarta(c));
+    plano.appendChild(crearCarta(c));
     if (c.volteada) c.el.classList.add('volteada');
     aplicar(c);
     estado.mesa.push(c);
@@ -712,7 +716,7 @@
     const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const fx = lupaImg.getBoundingClientRect();
     const dx = cx - (fx.left + fx.width / 2), dy = cy - (fx.top + fx.height / 2);
-    const s = (geo.cw * (c.s || 1)) / m.w;
+    const s = (geo.cw * (c.s || 1) * vista.z) / m.w;
     return `translate(${dx}px, ${dy}px) rotate(${c.rot}deg) scale(${s})`;
   }
 
@@ -796,7 +800,7 @@
   }
 
   mesa.addEventListener('click', (e) => {
-    if (e.target === mesa) ocultarHaiku();
+    if ((e.target === mesa || e.target === plano) && !recienPaneada) ocultarHaiku();
   });
 
   // ——— Rastro de π ———
@@ -834,6 +838,7 @@
     if (ocupado) return;
     ocupado = true;
     ocultarHaiku();
+    restablecerVista(true);
     const cartas = estado.mesa.slice();
     estado.extraidas = 0;
     calcular();
@@ -980,6 +985,9 @@
   async function sacarFoto() {
     if (!arcanos.length || ocupado) return;
     botonFoto.disabled = true;
+    // La foto es siempre la mesa entera, sin zoom
+    const vistaPrevia = { ...vista };
+    restablecerVista(false);
     try {
       await document.fonts.ready;
       const raiz = getComputedStyle(document.documentElement);
@@ -1211,6 +1219,7 @@
       console.error('No se pudo sacar la foto', e);
     } finally {
       botonFoto.disabled = false;
+      if (vistaPrevia.z !== 1) { Object.assign(vista, vistaPrevia); aplicarVista(false); }
     }
   }
 
@@ -1244,6 +1253,127 @@
   }
 
   botonFoto.addEventListener('click', sacarFoto);
+
+  // ——— Zoom de la mesa: lupas, pellizco del trackpad y paneo ———
+
+  const ZOOM_MIN = 1;
+  const ZOOM_MAX = 3;
+  const vista = { z: 1, tx: 0, ty: 0 };
+  let recienPaneada = false;
+
+  // Del punto en pantalla al punto en la mesa sin ampliar
+  function aMesa(cx, cy) {
+    const r = mesa.getBoundingClientRect();
+    return { x: (cx - r.left - vista.tx) / vista.z, y: (cy - r.top - vista.ty) / vista.z };
+  }
+
+  function aplicarVista(suave) {
+    const { W, H } = geo;
+    vista.z = clamp(vista.z, ZOOM_MIN, ZOOM_MAX);
+    if (vista.z < 1.02) { vista.z = 1; vista.tx = 0; vista.ty = 0; }
+    vista.tx = clamp(vista.tx, W - W * vista.z, 0);
+    vista.ty = clamp(vista.ty, H - H * vista.z, 0);
+    plano.classList.toggle('suave', !!suave && !mqQuieto.matches);
+    plano.style.transform = vista.z === 1 ? '' : `translate(${vista.tx.toFixed(1)}px, ${vista.ty.toFixed(1)}px) scale(${vista.z.toFixed(4)})`;
+    mesa.classList.toggle('ampliada', vista.z > 1);
+    $('#zoom-nivel').textContent = Math.round(vista.z * 100) + '%';
+    $('#zoom-mas').disabled = vista.z >= ZOOM_MAX;
+    $('#zoom-menos').disabled = vista.z <= ZOOM_MIN;
+  }
+
+  // Amplía hacia un punto de la mesa (px, py relativos a ella), que queda quieto
+  function zoomEn(z2, px, py, suave) {
+    z2 = clamp(z2, ZOOM_MIN, ZOOM_MAX);
+    const f = z2 / vista.z;
+    vista.tx = px - (px - vista.tx) * f;
+    vista.ty = py - (py - vista.ty) * f;
+    vista.z = z2;
+    aplicarVista(suave);
+  }
+
+  function restablecerVista(suave) {
+    vista.z = 1; vista.tx = 0; vista.ty = 0;
+    aplicarVista(suave);
+  }
+
+  const capaAbierta = () => !rueda.hidden || !lupa.hidden;
+  const zoomPosible = () => modo === 'mesa' && !capaAbierta();
+  const alCentro = (factor) => zoomEn(vista.z * factor, geo.W / 2, geo.H / 2, true);
+
+  $('#zoom-mas').addEventListener('click', () => alCentro(1.5));
+  $('#zoom-menos').addEventListener('click', () => alCentro(1 / 1.5));
+  $('#zoom-nivel').addEventListener('click', () => restablecerVista(true));
+
+  // Pellizco en Chrome y Firefox (llega como rueda con ctrl) y desplazamiento con dos dedos
+  let gesto = null;
+  window.addEventListener('wheel', (e) => {
+    if (!zoomPosible()) return;
+    const r = mesa.getBoundingClientRect();
+    if (e.ctrlKey) {
+      e.preventDefault();               // evita el zoom de la página entera
+      if (gesto !== null) return;       // Safari ya lo maneja con sus gestos
+      zoomEn(vista.z * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top, false);
+    } else if (vista.z > 1 && e.target.closest('#mesa')) {
+      e.preventDefault();
+      vista.tx -= e.deltaX;
+      vista.ty -= e.deltaY;
+      aplicarVista(false);
+    }
+  }, { passive: false });
+
+  // Pellizco en Safari
+  window.addEventListener('gesturestart', (e) => {
+    if (!zoomPosible()) return;
+    e.preventDefault();
+    gesto = vista.z;
+  });
+  window.addEventListener('gesturechange', (e) => {
+    if (gesto === null) return;
+    e.preventDefault();
+    const r = mesa.getBoundingClientRect();
+    zoomEn(gesto * e.scale, e.clientX - r.left, e.clientY - r.top, false);
+  });
+  window.addEventListener('gestureend', (e) => {
+    if (gesto === null) return;
+    e.preventDefault();
+    gesto = null;
+  });
+
+  // Con la mesa ampliada, arrastrar el fondo la desplaza
+  mesa.addEventListener('pointerdown', (e) => {
+    if (vista.z === 1 || (e.target !== mesa && e.target !== plano)) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    mesa.setPointerCapture(e.pointerId);
+    const inicio = { x: e.clientX, y: e.clientY, tx: vista.tx, ty: vista.ty };
+    let movida = false;
+    const mover = (ev) => {
+      const dx = ev.clientX - inicio.x, dy = ev.clientY - inicio.y;
+      if (!movida && Math.hypot(dx, dy) < 5) return;
+      movida = true;
+      mesa.classList.add('paneando');
+      vista.tx = inicio.tx + dx;
+      vista.ty = inicio.ty + dy;
+      aplicarVista(false);
+    };
+    const soltar = () => {
+      mesa.removeEventListener('pointermove', mover);
+      mesa.removeEventListener('pointerup', soltar);
+      mesa.removeEventListener('pointercancel', soltar);
+      mesa.classList.remove('paneando');
+      if (movida) { recienPaneada = true; setTimeout(() => { recienPaneada = false; }, 0); }
+    };
+    mesa.addEventListener('pointermove', mover);
+    mesa.addEventListener('pointerup', soltar);
+    mesa.addEventListener('pointercancel', soltar);
+  });
+
+  // Teclado: + y − amplían, 0 vuelve al tamaño original
+  document.addEventListener('keydown', (e) => {
+    if (!zoomPosible() || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === '+' || e.key === '=') { e.preventDefault(); alCentro(1.5); }
+    else if (e.key === '-' || e.key === '_') { e.preventDefault(); alCentro(1 / 1.5); }
+    else if (e.key === '0') { e.preventDefault(); restablecerVista(true); }
+  });
 
   // ——— Contador global de barajadas ———
   // Abacus: contador público sin cuentas ni servidor propio. Cada visita suma al mismo total.
@@ -1290,6 +1420,7 @@
       calcular();
       colocarMazo();
       dibujarCotas();
+      aplicarVista(false);
       estado.mesa.forEach((c) => {
         if (modo === 'mesa') {
           c.x = clamp(c.x * geo.W, 0, geo.W - geo.cw) / geo.W;
@@ -1304,6 +1435,7 @@
     modo = mqMovil.matches ? 'movil' : 'mesa';
     document.body.classList.toggle('movil', modo === 'movil');
     ocultarAviso();
+    restablecerVista(false);
     reiniciarEstado();
   });
 
